@@ -1,5 +1,6 @@
 from flask import request
 from flask_restful import Resource
+from werkzeug.security import generate_password_hash
 
 from models.administrador import Administrador
 from models.cliente import Cliente
@@ -10,7 +11,7 @@ from models.user import User, db
 
 class UsersResource(Resource):
 
-    def get(self, user_id=None):
+    def get(self, user_id: int | None = None) -> dict:
         if user_id:
             user = User.query.get(user_id)
             if not user:
@@ -20,12 +21,13 @@ class UsersResource(Resource):
         users = User.query.all()
         return {"users": [u.to_dict() for u in users]}, 200
 
-    def post(self):
+    def post(self) -> dict:
         data = request.get_json(force=True)
 
         nome = data.get("nome")
         email = data.get("email")
         senha = data.get("senha")
+        senha_hash = generate_password_hash(senha)
         telefone = data.get("telefone")
         tipo = data.get("tipo")
 
@@ -35,7 +37,7 @@ class UsersResource(Resource):
             }, 400
 
         new_user = User(
-            nome=nome, email=email, senha=senha, telefone=telefone, tipo=tipo
+            nome=nome, email=email, senha=senha_hash, telefone=telefone, tipo=tipo
         )
 
         db.session.add(new_user)
@@ -89,7 +91,7 @@ class UsersResource(Resource):
             "user": new_user.to_dict(),
         }, 201
 
-    def put(self, user_id):
+    def put(self, user_id: int) -> dict:
         user = User.query.get(user_id)
         if not user:
             return {"error": "User not found"}, 404
@@ -115,7 +117,7 @@ class UsersResource(Resource):
         db.session.commit()
         return {"message": "User updated successfully", "user": user.to_dict()}, 200
 
-    def delete(self, user_id):
+    def delete(self, user_id: int) -> dict:
         user = User.query.get(user_id)
         if not user:
             return {"error": "User not found"}, 404
