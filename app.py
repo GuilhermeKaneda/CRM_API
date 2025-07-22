@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 
+from controllers.docs import DocsResource
 from controllers.user import UsersResource
 from models.user import db as db_model
 
@@ -19,6 +20,7 @@ def create_app():
     api = Api(app)
     # rotas
     api.add_resource(UsersResource, "/users", "/users/<int:user_id>", endpoint="users")
+    api.add_resource(DocsResource, "/docs", endpoint="docs")
 
     return app
 
