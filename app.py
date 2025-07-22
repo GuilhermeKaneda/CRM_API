@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 
+from controllers.calculo import CalcResource
 from controllers.docs import DocsResource
 from controllers.projetos import ProjectsResource
 from controllers.propostas import OffersResource
@@ -32,6 +33,7 @@ def create_app():
         "/propostas/<int:proposta_id>",
         endpoint="propostas",
     )
+    api.add_resource(CalcResource, "/calc", endpoint="calc")
 
     return app
 
