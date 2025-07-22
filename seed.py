@@ -1,7 +1,8 @@
 from faker import Faker
+
 from app import app
+from models.estado import Estado
 from models.user import User, db
-from models.estado import Estado 
 
 # faker do lol
 fake = Faker()
@@ -9,7 +10,7 @@ fake = Faker()
 # faz o povoamento
 with app.app_context():
     print("Starting seed...")
-    
+
     Estado.query.delete()
     User.query.delete()
 
@@ -23,21 +24,19 @@ with app.app_context():
         tipo = "moderador"
 
         new_user = User(
-            nome=nome,
-            email=email,
-            senha=senha,
-            telefone=telefone,
-            tipo=tipo
+            nome=nome, email=email, senha=senha, telefone=telefone, tipo=tipo
         )
 
-        db.session.add(new_user)  
-        db.session.flush()        
+        db.session.add(new_user)
+        db.session.flush()
 
         estado = Estado(
             user_id=new_user.user_id,
             estado=fake.state()[:20],
             valor_estado=round(fake.random_number(digits=4) / 100, 2),
-            tipo_de_cobranca=fake.random_element(elements=["fixo", "variável", "por_hora"])
+            tipo_de_cobranca=fake.random_element(
+                elements=["fixo", "variável", "por_hora"]
+            ),
         )
         db.session.add(estado)
 

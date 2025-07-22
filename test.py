@@ -5,12 +5,12 @@ url = "http://127.0.0.1:5555/users"
 data = {
     "nome": "João Silva",
     "email": "joao.silva@example.com",
-    "senha": "senha123",  
+    "senha": "senha123",
     "telefone": "11999999999",
     "tipo": "prestador",
     "estado": "SP",
     "valor_estado": 1200.50,
-    "tipo_de_cobranca": "material"
+    "tipo_de_cobranca": "material",
 }
 
 response = requests.post(url, json=data)
