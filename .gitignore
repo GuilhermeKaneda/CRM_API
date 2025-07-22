@@ -209,3 +209,6 @@ __marimo__/
 # Google Credentials
 client_secrets.json
 my_credentials.json
+
+# DB
+instance/
