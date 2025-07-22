@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()
+from models.user import db
 
 
 class Offer(db.Model):
@@ -10,7 +10,7 @@ class Offer(db.Model):
     prestador_id = db.Column(db.Integer, db.ForeignKey("prestador.user_id"))
     valor_proposto = db.Column(db.Float, nullable=False)
     prazo_proposto = db.Column(db.Integer, nullable=False)
-    data_envio = db.Column(db.Timestamp, nullable=False)
+    data_envio = db.Column(db.DateTime, nullable=False)
 
     def to_dict(self):
         return {

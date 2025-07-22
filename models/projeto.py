@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()
+from models.user import db
 
 
 class Project(db.Model):
@@ -8,7 +8,7 @@ class Project(db.Model):
     projeto_id = db.Column(db.Integer, primary_key=True)
     cliente_id = db.Column(db.Integer, db.ForeignKey("cliente.user_id"))
     prestador_id = db.Column(db.Integer, db.ForeignKey("prestador.user_id"))
-    data_solicitacao = db.Column(db.Timestamp, nullable=False)
+    data_solicitacao = db.Column(db.DateTime, nullable=False)
     data_inicial = db.Column(db.Date, nullable=False)
     data_final = db.Column(db.Date, nullable=False)
     prazo_dias = db.Column(db.Integer, nullable=False)
