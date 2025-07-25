@@ -4,7 +4,6 @@ from flask_restful import Api
 from controllers.calculo import CalcResource
 from controllers.docs import DocsResource
 from controllers.projetos import ProjectsResource
-from controllers.propostas import OffersResource
 from controllers.user import UsersResource
 from models.user import db as db_model
 
@@ -26,12 +25,6 @@ def create_app():
     api.add_resource(DocsResource, "/docs", endpoint="docs")
     api.add_resource(
         ProjectsResource, "/projetos", "/projetos/<int:projeto_id>", endpoint="projetos"
-    )
-    api.add_resource(
-        OffersResource,
-        "/propostas",
-        "/propostas/<int:proposta_id>",
-        endpoint="propostas",
     )
     api.add_resource(CalcResource, "/calc", endpoint="calc")
 

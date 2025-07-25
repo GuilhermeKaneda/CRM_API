@@ -13,9 +13,7 @@ load_dotenv()
 GOOGLE_CREDENTIALS_PATH = os.environ.get("GOOGLE_CREDENTIALS_PATH")
 GDRIVE_FOLDER_ID = os.environ.get("GDRIVE_FOLDER_ID")
 
-
 class DocsResource(Resource):
-
     def authenticate_google_drive(self) -> GoogleDrive:
         """
         Função que autentica com o Google Drive.

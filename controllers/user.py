@@ -8,7 +8,6 @@ from models.estado import Estado
 from models.prestador import Prestador
 from models.user import User, db
 
-
 class UsersResource(Resource):
 
     def get(self, user_id: int | None = None) -> dict:
@@ -32,12 +31,14 @@ class UsersResource(Resource):
         tipo = data.get("tipo")
 
         if not all([nome, email, senha, tipo]):
-            return {
-                "error": "Os campos nome, email, senha_hash e tipo são obrigatórios"
-            }, 400
+            return {"error": "Os campos nome, email, senha_hash e tipo são obrigatórios"}, 400
 
         new_user = User(
-            nome=nome, email=email, senha=senha_hash, telefone=telefone, tipo=tipo
+            nome=nome, 
+            email=email, 
+            senha=senha_hash, 
+            telefone=telefone, 
+            tipo=tipo
         )
 
         db.session.add(new_user)
@@ -69,9 +70,7 @@ class UsersResource(Resource):
             db.session.add(adm)
 
         else:
-            return {
-                "error": f"Tipo '{tipo}' inválido. Deve ser cliente, prestador ou administrador."
-            }, 400
+            return {"error": f"Tipo '{tipo}' inválido. Deve ser cliente, prestador ou administrador."}, 400
 
         # add na tabela estado caso tenha atributo estado
         # a condicao para ser adm ou prestador vai ser feita no proprio json, ou seja, front
@@ -86,10 +85,7 @@ class UsersResource(Resource):
 
         db.session.commit()
 
-        return {
-            "message": "User and subtype created successfully",
-            "user": new_user.to_dict(),
-        }, 201
+        return {"message": "User and subtype created successfully","user": new_user.to_dict(),}, 201
 
     def put(self, user_id: int) -> dict:
         user = User.query.get(user_id)
@@ -104,9 +100,7 @@ class UsersResource(Resource):
         telefone = data.get("telefone")
 
         if not nome or not email or not senha_hash or not tipo:
-            return {
-                "error": "Os campos nome, email, senha_hash e tipo são obrigatórios"
-            }, 400
+            return {"error": "Os campos nome, email, senha_hash e tipo são obrigatórios"}, 400
 
         user.nome = nome
         user.email = email

@@ -3,9 +3,7 @@ from flask_restful import Resource
 
 from models.projeto import Project, db
 
-
 class ProjectsResource(Resource):
-
     def get(self, projeto_id=None):
         if projeto_id:
             projeto = Project.query.get(projeto_id)
@@ -31,16 +29,13 @@ class ProjectsResource(Resource):
                 valor_material=data.get("valor_material"),
                 valor_assinatura=data.get("valor_assinatura"),
                 valor_total=data.get("valor_total"),
-                status=data.get("status"),
+                status=data.get("status")
             )
 
             db.session.add(projeto)
             db.session.commit()
 
-            return {
-                "message": "Projeto criado com sucesso",
-                "projeto": projeto.to_dict(),
-            }, 201
+            return {"message": "Projeto criado com sucesso", "projeto": projeto.to_dict()}, 201
         except Exception as e:
             db.session.rollback()
             return {"error": f"Erro ao criar projeto: {str(e)}"}, 500
@@ -70,10 +65,7 @@ class ProjectsResource(Resource):
                 setattr(projeto, attr, data[attr])
 
         db.session.commit()
-        return {
-            "message": "Projeto atualizado com sucesso",
-            "projeto": projeto.to_dict(),
-        }, 200
+        return {"message": "Projeto atualizado com sucesso", "projeto": projeto.to_dict()}, 200
 
     def delete(self, projeto_id):
         projeto = Project.query.get(projeto_id)
