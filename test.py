@@ -8,8 +8,8 @@ data = {
     "senha": "senha123",
     "telefone": "11999999999",
     "tipo": "prestador",
-    "estado": "SP",
-    "valor_estado": 1200.50,
+    "estado": ["SP", "RJ"],
+    "valor_estado": [1200.50, 1500.75],
     "tipo_de_cobranca": "material",
 }
 

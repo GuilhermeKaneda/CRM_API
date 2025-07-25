@@ -75,13 +75,18 @@ class UsersResource(Resource):
         # add na tabela estado caso tenha atributo estado
         # a condicao para ser adm ou prestador vai ser feita no proprio json, ou seja, front
         if data.get("estado"):
-            est = Estado(
-                user_id=new_user.user_id,
-                estado=data.get("estado"),
-                valor_estado=data.get("valor_estado"),
-                tipo_de_cobranca=data.get("tipo_de_cobranca"),
-            )
-            db.session.add(est)
+            estados = data.get("estado")
+            valores = data.get("valor_estado")
+
+            # https://stackoverflow.com/questions/71086453/how-to-combine-the-elements-of-two-lists-using-zip-function-in-python
+            for estado, valor in zip(estados, valores):
+                est = Estado(
+                    user_id=new_user.user_id,
+                    estado=estado,
+                    valor_estado=valor,
+                    tipo_de_cobranca=data.get("tipo_de_cobranca"),
+                )
+                db.session.add(est)
 
         db.session.commit()
 
