@@ -8,6 +8,7 @@ class Project(db.Model):
     projeto_id = db.Column(db.Integer, primary_key=True)
     cliente_id = db.Column(db.Integer, db.ForeignKey("cliente.user_id"))
     prestador_id = db.Column(db.Integer, db.ForeignKey("prestador.user_id"))
+    estado = db.Column(db.String(20), nullable=False)
     data_solicitacao = db.Column(db.DateTime, nullable=False)
     data_inicial = db.Column(db.Date, nullable=False)
     data_final = db.Column(db.Date, nullable=False)

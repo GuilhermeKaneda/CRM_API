@@ -21,6 +21,7 @@ class ProjectsResource(Resource):
             projeto = Project(
                 cliente_id=data.get("cliente_id"),
                 prestador_id=data.get("prestador_id"),
+                estado=data.get("estado"),
                 data_solicitacao=data.get("data_solicitacao"),
                 data_inicial=data.get("data_inicial"),
                 data_final=data.get("data_final"),
@@ -51,6 +52,7 @@ class ProjectsResource(Resource):
         for attr in [
             "cliente_id",
             "prestador_id",
+            "estado",
             "data_solicitacao",
             "data_inicial",
             "data_final",
