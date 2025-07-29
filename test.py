@@ -14,16 +14,9 @@ data = {
     "conta_energia_url": 125.75,
     "conta_kilowatts": 320.40
 }
-
-response = requests.post(url, json=data)
-
-print("Status Code:", response.status_code)
-try:
-    print("JSON Response:", response.json())
-except Exception:
-    print("Resposta não é JSON:", response.text)
 """
 
+"""
 url = "http://127.0.0.1:5555/projetos"
 
 data = {
@@ -39,6 +32,13 @@ data = {
     "valor_assinatura": 200.00,
     "valor_total": 6700.00,
     "status": "feito"
+}"""
+
+url = "http://127.0.0.1:5555/login"
+
+data = {
+    "email": "pedro.alvez@example.com",
+    "senha": "SenhaForte!23",
 }
 
 response = requests.post(url, json=data)

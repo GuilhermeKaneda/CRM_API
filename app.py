@@ -5,6 +5,7 @@ from controllers.calculo import CalcResource
 from controllers.docs import DocsResource
 from controllers.projetos import ProjectsResource
 from controllers.user import UsersResource
+from controllers.login import LoginResource
 from models.user import db as db_model
 
 
@@ -23,10 +24,10 @@ def create_app():
     # rotas
     api.add_resource(UsersResource, "/users", "/users/<int:user_id>", endpoint="users")
     api.add_resource(DocsResource, "/docs", endpoint="docs")
-    api.add_resource(
-        ProjectsResource, "/projetos", "/projetos/<int:projeto_id>", endpoint="projetos"
-    )
+    api.add_resource(ProjectsResource, "/projetos", "/projetos/<int:projeto_id>", endpoint="projetos")
     api.add_resource(CalcResource, "/calc", endpoint="calc")
+    api.add_resource(LoginResource, '/login', endpoint="login")
+
 
     return app
 
