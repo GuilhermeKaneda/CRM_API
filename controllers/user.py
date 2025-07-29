@@ -26,20 +26,22 @@ class UsersResource(Resource):
         nome = data.get("nome")
         email = data.get("email")
         senha = data.get("senha")
-        senha_hash = generate_password_hash(senha)
+        senha = senha
         telefone = data.get("telefone")
         tipo = data.get("tipo")
 
         if not all([nome, email, senha, tipo]):
-            return {"error": "Os campos nome, email, senha_hash e tipo são obrigatórios"}, 400
+            return {"error": "Os campos nome, email, senha e tipo são obrigatórios"}, 400
 
         new_user = User(
             nome=nome, 
             email=email, 
-            senha=senha_hash, 
+            senha=senha, 
             telefone=telefone, 
             tipo=tipo
         )
+
+        new_user.set_password(senha)
 
         db.session.add(new_user)
         # forca o add no user para gera o fk para as outras
