@@ -1,5 +1,8 @@
 from flask import Flask
 from flask_restful import Api
+from flask_cors import CORS
+import os
+from dotenv import load_dotenv
 
 from controllers.calculo import CalcResource
 from controllers.docs import DocsResource
@@ -8,6 +11,7 @@ from controllers.user import UsersResource
 from controllers.login import LoginResource
 from models.user import db as db_model
 
+load_dotenv()
 
 def create_app():
     app = Flask(__name__)
@@ -21,6 +25,9 @@ def create_app():
         db_model.create_all()
 
     api = Api(app)
+    # CORS é obrigatorio para permitir requisições de outras URLs
+    CORS(app, origins=[os.environ.get("FRONTEND_URL"), "http://localhost:3000"])
+
     # rotas
     api.add_resource(UsersResource, "/users", "/users/<int:user_id>", endpoint="users")
     api.add_resource(DocsResource, "/docs", endpoint="docs")
@@ -28,9 +35,7 @@ def create_app():
     api.add_resource(CalcResource, "/calc", endpoint="calc")
     api.add_resource(LoginResource, '/login', endpoint="login")
 
-
     return app
-
 
 app = create_app()
 

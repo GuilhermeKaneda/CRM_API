@@ -6,3 +6,4 @@ flask_sqlalchemy
 pydrive
 dotenv
 sqlalchemy
+flask_cors
