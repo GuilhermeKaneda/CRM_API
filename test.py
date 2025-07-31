@@ -1,4 +1,12 @@
 import requests
+from app import app  
+from models.user import User, db
+
+"""
+with app.app_context():
+    User.query.delete()
+    db.session.commit()
+"""
 
 """
 url = "http://127.0.0.1:5555/users"
@@ -8,7 +16,7 @@ data = {
     "email": "pedro.alvez@example.com",
     "senha": "SenhaForte!23",
     "telefone": "(11) 99999-8888",
-    "tipo": "cliente",
+    "tipo": "client",
     "documento_identidade": "12345678901",
     "endereco": "Rua das Flores, 123, São Paulo, SP, 01234-567",
     "conta_energia_url": 125.75,

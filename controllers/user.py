@@ -48,7 +48,7 @@ class UsersResource(Resource):
         db.session.flush()
 
         # add nas tabelas cliente, adm ou prestador
-        if tipo == "cliente":
+        if tipo == "client":
             cli = Cliente(
                 user_id=new_user.user_id,
                 documento_identidade=data.get("documento_identidade"),
@@ -58,13 +58,13 @@ class UsersResource(Resource):
             )
             db.session.add(cli)
 
-        elif tipo == "prestador":
+        elif tipo == "provider":
             pr = Prestador(
                 user_id=new_user.user_id,
             )
             db.session.add(pr)
 
-        elif tipo == "administrador":
+        elif tipo == "admin":
             adm = Administrador(
                 user_id=new_user.user_id,
                 valor_assinatura=data.get("valor_assinatura"),
