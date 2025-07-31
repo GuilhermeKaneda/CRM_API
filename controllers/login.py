@@ -15,4 +15,4 @@ class LoginResource(Resource):
         if not user or not user.check_password(senha):
             return {"error": "Email ou senha inválidos"}, 401
 
-        return {"user": user.to_dict()}, 200
+        return {"email": user.email, "tipo": user.tipo}, 200
