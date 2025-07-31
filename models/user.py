@@ -25,6 +25,5 @@ class User(db.Model):
             "nome": self.nome,
             "email": self.email,
             # não expoe a senha_hash
-            "telefone": self.telefone,
             "tipo": self.tipo,
         }
