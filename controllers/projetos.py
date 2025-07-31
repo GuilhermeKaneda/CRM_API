@@ -1,16 +1,29 @@
+from datetime import date, datetime
+
 from flask import request
 from flask_restful import Resource
 from sqlalchemy import func
-from datetime import datetime, date
 
+from models.administrador import Administrador
+from models.material import Material
 from models.projeto import Project, db
 
-# mapa dos meses 
+# mapa dos meses
 MESES_PT = {
-    1: "Jan", 2: "Fev", 3: "Mar", 4: "Abr",
-    5: "Mai", 6: "Jun", 7: "Jul", 8: "Ago",
-    9: "Set", 10: "Out", 11: "Nov", 12: "Dez"
+    1: "Jan",
+    2: "Fev",
+    3: "Mar",
+    4: "Abr",
+    5: "Mai",
+    6: "Jun",
+    7: "Jul",
+    8: "Ago",
+    9: "Set",
+    10: "Out",
+    11: "Nov",
+    12: "Dez",
 }
+
 
 class ProjectsResource(Resource):
     def get(self, projeto_id=None):
@@ -30,7 +43,7 @@ class ProjectsResource(Resource):
                     func.extract("year", Project.data_final).label("ano"),
                     func.extract("month", Project.data_final).label("mes"),
                     func.count(Project.projeto_id).label("done"),
-                    func.coalesce(func.sum(Project.valor_total), 0).label("revenue")
+                    func.coalesce(func.sum(Project.valor_total), 0).label("revenue"),
                 )
                 .filter(Project.status == "feito")
                 .group_by("ano", "mes")
@@ -40,15 +53,15 @@ class ProjectsResource(Resource):
 
             output = {}
             for ano, mes, done, revenue in rows:
-                ano = int(ano); mes = int(mes)
+                ano = int(ano)
+                mes = int(mes)
                 if ano not in output:
                     output[ano] = {
-                        MESES_PT[m]: {"done": 0, "revenue": 0}
-                        for m in range(1, 13)
+                        MESES_PT[m]: {"done": 0, "revenue": 0} for m in range(1, 13)
                     }
                 output[ano][MESES_PT[mes]] = {
                     "done": int(done),
-                    "revenue": float(revenue)
+                    "revenue": float(revenue),
                 }
             return output, 200
 
@@ -58,7 +71,7 @@ class ProjectsResource(Resource):
             projetos = Project.query.filter_by(prestador_id=prestador_id).all()
             return {
                 "prestador_id": prestador_id,
-                "projetos": [p.to_dict() for p in projetos]
+                "projetos": [p.to_dict() for p in projetos],
             }, 200
 
         # lista geral (/projects)
@@ -73,25 +86,35 @@ class ProjectsResource(Resource):
             data_inicial = date.fromisoformat(data["data_inicial"])
             data_final = date.fromisoformat(data["data_final"])
 
+            # Realiza uma consulta na tabela de materiais para extrair valor dos materiais / placa
+            materiais = Material.query.one()
+            # Consulta tabela admin para retirar valor da assinatura
+            admin = Administrador.query.one()
+
             projeto = Project(
-                cliente_id = data["cliente_id"],
-                prestador_id = data["prestador_id"],
-                estado = data["estado"],
-                data_solicitacao = data_solicitacao,
-                data_inicial = data_inicial,
-                data_final = data_final,
-                prazo_dias = data["prazo_dias"],
-                valor_prestador = data["valor_prestador"],
-                valor_material = data["valor_material"],
-                valor_assinatura = data["valor_assinatura"],
-                valor_total = data["valor_total"],
-                status = data["status"]
+                cliente_id=data["cliente_id"],
+                prestador_id=data["prestador_id"],
+                estado=data["estado"],
+                data_solicitacao=data_solicitacao,
+                data_inicial=data_inicial,
+                data_final=data_final,
+                prazo_dias=data["prazo_dias"],
+                # !!! Acho que temos que extrair essa informação da tabela prestador !!!
+                valor_prestador=data["valor_prestador"],
+                valor_material=materiais.valor_diversos,
+                valor_assinatura=admin.valor_assinatura,
+                # Front tem que ter dado post no endpoint de calculo antes!!
+                valor_total=data["valor_total"],
+                status=data["status"],
             )
 
             db.session.add(projeto)
             db.session.commit()
 
-            return {"message": "Projeto criado com sucesso", "projeto": projeto.to_dict()}, 201
+            return {
+                "message": "Projeto criado com sucesso",
+                "projeto": projeto.to_dict(),
+            }, 201
         except Exception as e:
             db.session.rollback()
             return {"error": f"Erro ao criar projeto: {str(e)}"}, 500
@@ -122,7 +145,10 @@ class ProjectsResource(Resource):
                 setattr(projeto, attr, data[attr])
 
         db.session.commit()
-        return {"message": "Projeto atualizado com sucesso", "projeto": projeto.to_dict()}, 200
+        return {
+            "message": "Projeto atualizado com sucesso",
+            "projeto": projeto.to_dict(),
+        }, 200
 
     def delete(self, projeto_id):
         projeto = Project.query.get(projeto_id)
